@@ -1,0 +1,22 @@
+version: 2.1
+
+jobs:
+  build_and_test:
+    docker:
+      - image: openjdk:8-jdk-alpine
+    steps:
+      - checkout
+      - run: ./gradlew build
+      - persist_to_workspace:
+          root: ./
+          paths:
+            - build/libs/ci-cd-demo-0.0.1-SNAPSHOT.jar
+            - Dockerfile
+      - store_test_results:
+          path: build/test-results
+
+workflows:
+  version: 2
+  spring_boot_cicd_workflow:
+    jobs:
+      - build_and_test
